@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Minimal offline utility hub: row shuffler, UID link converter, random serial picker.">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Utility Hub</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2e;--panel2:#0d1425;--line:#293653;--text:#eef3ff;--muted:#9eacc8;--accent:#8b7cff;--mint:#37d6b0;--blue:#72a5ff;--red:#ff8caa}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 15% 0%,#1b2a50 0,transparent 38%),var(--bg);font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);padding:18px 12px 30px}
+main{max-width:920px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 22px}.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:17px;letter-spacing:.02em}.mark{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#6b8cff,#a78bfa);box-shadow:0 7px 24px #6b8cff35;font-size:20px}
+h1{font-size:clamp(25px,5vw,34px);line-height:1.15;letter-spacing:-.6px;margin:7px 0 8px}h2{font-size:19px;margin:0}p{color:var(--muted);margin:6px 0}.muted{color:var(--muted)}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:800;color:var(--mint)}
+.panel{background:linear-gradient(145deg,#141e33f2,#0f1729f5);border:1px solid var(--line);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 14px 40px #0002}
+.menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.tool{min-height:160px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:17px;background:linear-gradient(145deg,#182542,#11192b);border:1px solid #334363;border-radius:17px;color:var(--text);cursor:pointer;transition:.18s}.tool:hover{border-color:var(--accent);transform:translateY(-2px)}.tool .ico{font-size:25px}.tool strong{font-size:15px}.tool small{color:var(--muted);font-size:12px}.open-label{margin-top:auto;color:#bdb4ff;font-size:12px;font-weight:800}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}.toolbar h1{font-size:clamp(23px,4vw,30px)}
+label{display:block;font-weight:700;font-size:13px;margin-bottom:8px;color:#d7e1f4}textarea,input{width:100%;border:1px solid #344363;border-radius:11px;background:#080f1e;color:var(--text);padding:12px;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;outline:none}textarea{min-height:170px;resize:vertical}textarea:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #8b7cff20}input[type=checkbox]{width:auto;accent-color:var(--accent)}input[type=number]{font-family:inherit;font-size:14px}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px}.check{display:flex;align-items:center;gap:7px;margin:0;font-weight:600;font-size:12px}.btn{border:1px solid transparent;border-radius:10px;padding:10px 14px;font-weight:800;font-size:12px;color:white;background:linear-gradient(135deg,#667fff,#8b68f5);cursor:pointer}.btn.secondary{background:#202b46;border-color:#3b4969;color:#dce6f9}.btn.green{background:linear-gradient(135deg,#168d76,#20ad86)}.btn.danger{background:#382031;border-color:#623046;color:#ffb3c4}.btn:disabled{opacity:.4;cursor:not-allowed}.status{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;background:#0d2c2a;color:#a8ffeb;font-size:12px}.status.error{background:#3a1c29;color:#ffc2d0}.stats{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.chip{border:1px solid var(--line);border-radius:999px;padding:4px 9px;color:#c6d2ee;font-size:11px}.preview{overflow:auto;max-height:250px;border:1px solid var(--line);border-radius:10px;margin-top:10px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;max-width:240px}th{background:#1b2742;position:sticky;top:0}.hidden{display:none!important}.view-enter{animation:viewIn .22s ease-out both}@keyframes viewIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}.tool:active{transform:scale(.99)}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.subpanel{background:#0a1221;border:1px solid #263650;border-radius:13px;padding:13px}.statgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:13px}.stat{background:#0a1221;border:1px solid #263650;border-radius:12px;padding:12px}.stat small{display:block;color:var(--muted);font-size:10px;letter-spacing:.05em}.stat strong{display:block;font-size:22px;margin-top:4px}.resultbox{white-space:pre-wrap;overflow-wrap:anywhere;background:#080f1c;border:1px solid #202f48;border-radius:10px;padding:11px;min-height:155px;max-height:330px;overflow:auto;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}.result-actions{display:flex;gap:7px;margin-top:8px}.result-actions .btn{flex:1}.hint{font-size:12px;color:var(--muted)}footer{text-align:center;color:#7283a1;font-size:11px;padding:18px 0 4px}
+@media(max-width:680px){body{padding:13px 9px 24px}.menu{grid-template-columns:1fr}.tool{min-height:115px}.panel{padding:13px}.grid2{grid-template-columns:1fr}.stat{padding:9px}.stat strong{font-size:20px}.btn{padding:10px 11px}.toolbar{align-items:flex-start}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div class="brand"><span class="mark">✦</span><span>UTILITY <span style="color:var(--mint)">HUB</span></span></div>
+    <button class="btn secondary hidden" id="homeBtn" type="button">⌂ Menu</button>
+  </div>
+
+  <section id="homeView">
+    <div class="eyebrow">Three tools · One app</div>
+    <h1>Choose a tool</h1>
+    <p class="muted">Minimal workspace for everyday tasks.</p>
+    <div class="menu">
+      <button class="tool" data-open="shuffler" type="button"><span class="ico">↕</span><strong>Row Shuffler</strong><small>Shuffle A/B/C rows together.</small><span class="open-label">Open tool ↗</span></button>
+      <button class="tool" data-open="converter" type="button"><span class="ico">↗</span><strong>UID Link Converter</strong><small>Convert numeric UIDs to profile links.</small><span class="open-label">Open tool ↗</span></button>
+      <button class="tool" data-open="picker" type="button"><span class="ico">✦</span><strong>Random Serial Picker</strong><small>Select by count or percentage.</small><span class="open-label">Open tool ↗</span></button>
+    </div>
+  </section>
+
+  <section id="shufflerView" class="hidden">
+    <div class="toolbar"><div><div class="eyebrow">Tool 01</div><h1>Row Shuffler</h1></div><button class="btn secondary" data-home type="button">← Menu</button></div>
+    <div class="panel">
+      <label for="sheetInput">Paste Google Sheets A:C data</label>
+      <textarea id="sheetInput" spellcheck="false" placeholder="UID-1&#9;PASS-1&#9;2FA-1&#10;UID-2&#9;PASS-2&#9;2FA-2"></textarea>
+      <div class="row"><label class="check"><input id="sheetHeader" type="checkbox"> First row is header</label><label class="check"><input id="sheetBlank" type="checkbox" checked> Remove blank rows</label></div>
+      <div class="row"><button class="btn" id="shuffleBtn" type="button">Shuffle Rows</button><button class="btn secondary" id="previewBtn" type="button">Preview</button><button class="btn danger" id="clearSheetBtn" type="button">Clear</button></div>
+      <div class="stats" id="sheetInputStats"></div><div class="status" id="sheetStatus" role="status"></div>
+    </div>
+    <div class="panel">
+      <label for="sheetOutput">Shuffled result</label>
+      <textarea id="sheetOutput" spellcheck="false" placeholder="Result appears here"></textarea>
+      <div class="row"><button class="btn green" id="copySheetBtn" disabled type="button">Copy Result</button><button class="btn secondary" id="downloadSheetBtn" disabled type="button">Download TSV</button></div>
+      <div class="stats" id="sheetOutputStats"></div><div id="sheetTableWrap" class="preview" hidden></div>
+    </div>
+  </section>
+
+  <section id="converterView" class="hidden">
+    <div class="toolbar"><div><div class="eyebrow">Tool 02</div><h1>UID Link Converter</h1></div><button class="btn secondary" data-home type="button">← Menu</button></div>
+    <div class="panel">
+      <label for="uidInput">Paste UIDs · one per line</label>
+      <textarea id="uidInput" spellcheck="false" placeholder="61589424509481&#10;61589414594451&#10;100000123456789"></textarea>
+      <div class="row"><button class="btn" id="convertBtn" type="button">Convert</button><button class="btn danger" id="clearUIDBtn" type="button">Clear Input</button></div>
+    </div>
+    <div class="panel">
+      <div class="row" style="justify-content:space-between;margin-top:0"><label for="uidResult">Facebook profile links</label><span class="chip" id="linkCounter">0 links</span></div>
+      <textarea id="uidResult" readonly spellcheck="false" placeholder="Generated links appear here"></textarea>
+      <div class="row"><button class="btn green" id="copyUIDBtn" type="button">Copy Links</button><button class="btn secondary" id="downloadUIDBtn" type="button">Download TXT</button><button class="btn danger" id="clearOutputBtn" type="button">Clear Output</button></div>
+      <div class="status" id="uidStatus" role="status"></div>
+    </div>
+  </section>
+
+  <section id="pickerView" class="hidden">
+    <div class="toolbar"><div><div class="eyebrow">Tool 03</div><h1>Random Serial Picker</h1></div><button class="btn secondary" data-home type="button">← Menu</button></div>
+    <div class="panel">
+      <div class="row" style="justify-content:space-between;margin-top:0"><label for="serialInput">Serial numbers · one per line</label><span class="chip" id="inputCount">0 entries</span></div>
+      <textarea id="serialInput" placeholder="SN-1001&#10;SN-1002&#10;SN-1003"></textarea>
+      <div class="row"><button class="btn danger" id="clearInputBtn" type="button">Clear Input</button><button class="btn secondary" id="sampleBtn" type="button">Load Sample</button></div>
+      <div class="grid2" style="margin-top:14px">
+        <div class="subpanel"><label for="randomCount">Pick by count</label><input type="number" id="randomCount" min="1" step="1" placeholder="e.g. 25"><button class="btn" id="manualBtn" type="button" style="width:100%;margin-top:10px">Generate</button></div>
+        <div class="subpanel"><label for="percentage">Pick by percentage</label><input type="number" id="percentage" min="0.01" max="100" step="0.01" placeholder="e.g. 80"><p class="hint" id="percentHint">Enter a percentage.</p><button class="btn green" id="percentBtn" type="button" style="width:100%;margin-top:10px">Generate</button></div>
+      </div>
+      <div class="row"><button class="btn danger" id="clearPickerOutputBtn" type="button">Clear Results</button></div><div class="status" id="pickerNotice" role="status"></div>
+    </div>
+    <div class="panel">
+      <div class="statgrid"><div class="stat"><small>TOTAL</small><strong id="totalStat">0</strong></div><div class="stat"><small>SELECTED</small><strong id="selectedStat">0</strong></div><div class="stat"><small>REMAINING</small><strong id="remainingStat">0</strong></div></div>
+      <div class="grid2">
+        <div class="subpanel"><div class="row" style="justify-content:space-between;margin-top:0"><strong>Selected</strong><span class="chip" id="selectedCount">0 items</span></div><div class="resultbox" id="selectedResult">Selected numbers appear here.</div><div class="result-actions"><button class="btn green" id="copySelected" type="button">Copy Selected</button></div></div>
+        <div class="subpanel"><div class="row" style="justify-content:space-between;margin-top:0"><strong>Not Selected</strong><span class="chip" id="remainingCount">0 items</span></div><div class="resultbox" id="remainingResult">Remaining numbers appear here.</div><div class="result-actions"><button class="btn secondary" id="copyRemaining" type="button">Copy Remaining</button></div></div>
+      </div>
+    </div>
+  </section>
+  <footer>Utility Hub · Local processing</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function showView(name){['home','shuffler','converter','picker'].forEach(v=>{const el=$(v+'View');el.classList.toggle('hidden',v!==name);el.classList.remove('view-enter');if(v===name){void el.offsetWidth;el.classList.add('view-enter')}});$('homeBtn').classList.toggle('hidden',name==='home');window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.open)));
+document.querySelectorAll('[data-home]').forEach(b=>b.addEventListener('click',()=>showView('home')));
+$('homeBtn').addEventListener('click',()=>showView('home'));
+async function copyText(text){if(!text)return false;if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true;}return false;}
+function downloadText(text,name,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function status(id,msg,err=false){const s=$(id);s.textContent=msg;s.style.display='block';s.className='status'+(err?' error':'');}
+function hideStatus(id){$(id).style.display='none';}
+
+/* Row shuffler */
+function parseRows(t){return t.replace(/\r/g,'').split('\n').filter((l,i,a)=>!(i===a.length-1&&l==='')).map(l=>l.split('\t'));}
+function blankRow(r){return r.every(v=>v.trim()==='');}
+function getSheetRows(){const raw=$('sheetInput').value;if(!raw.trim())throw Error('Paste A:C data first.');let rows=parseRows(raw);if($('sheetBlank').checked)rows=rows.filter(r=>!blankRow(r));if(rows.some(r=>r.length>3))throw Error('More than 3 columns found. Select only A:C.');rows=rows.map(r=>{while(r.length<3)r.push('');return r;});if(!rows.length)throw Error('No data found.');return rows;}
+function setStats(id,n,label){$(id).innerHTML='';const c=document.createElement('span');c.className='chip';c.textContent=`${label}: ${n}`;$(id).appendChild(c);}
+function renderSheetPreview(text){const rows=parseRows(text),wrap=$('sheetTableWrap');wrap.hidden=false;wrap.innerHTML='';const table=document.createElement('table'),thead=document.createElement('thead'),tr=document.createElement('tr');['A','B','C'].forEach(v=>{const th=document.createElement('th');th.textContent=v;tr.appendChild(th)});thead.appendChild(tr);table.appendChild(thead);const tb=document.createElement('tbody');rows.slice(0,30).forEach(r=>{const tr=document.createElement('tr');for(let i=0;i<3;i++){const td=document.createElement('td');td.textContent=r[i]||'';tr.appendChild(td)}tb.appendChild(tr)});table.appendChild(tb);wrap.appendChild(table);if(rows.length>30){const p=document.createElement('p');p.className='hint';p.textContent=`Showing first 30 of ${rows.length} rows.`;wrap.appendChild(p)}}
+$('shuffleBtn').addEventListener('click',()=>{hideStatus('sheetStatus');try{let rows=getSheetRows(),header=null;if($('sheetHeader').checked)header=rows.shift();if(rows.length<2)throw Error('At least 2 data rows are required.');for(let i=rows.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rows[i],rows[j]]=[rows[j],rows[i]];}const result=header?[header,...rows]:rows;$('sheetOutput').value=result.map(r=>r.join('\t')).join('\n');$('copySheetBtn').disabled=false;$('downloadSheetBtn').disabled=false;setStats('sheetInputStats',rows.length,'Data rows');setStats('sheetOutputStats',rows.length,'Shuffled');renderSheetPreview($('sheetOutput').value);status('sheetStatus',`Shuffled ${rows.length} rows. A/B/C values stayed together.`);}catch(e){status('sheetStatus',e.message,true)}});
+$('previewBtn').addEventListener('click',()=>{hideStatus('sheetStatus');try{const r=getSheetRows();setStats('sheetInputStats',r.length,'Rows');renderSheetPreview(r.map(x=>x.join('\t')).join('\n'));status('sheetStatus',`${r.length} rows found.`)}catch(e){status('sheetStatus',e.message,true)}});
+$('copySheetBtn').addEventListener('click',async()=>{try{if(await copyText($('sheetOutput').value)){status('sheetStatus','Result copied.');return}}catch(e){}$('sheetOutput').focus();$('sheetOutput').select();try{const ok=document.execCommand('copy');status('sheetStatus',ok?'Result copied.':'Select and copy the result manually.',!ok)}catch(e){status('sheetStatus','Select and copy the result manually.',true)}});
+$('downloadSheetBtn').addEventListener('click',()=>downloadText($('sheetOutput').value.replace(/^\uFEFF/,''),'shuffled-data.tsv','text/tab-separated-values;charset=utf-8'));
+$('clearSheetBtn').addEventListener('click',()=>{$('sheetInput').value='';$('sheetOutput').value='';['sheetInputStats','sheetOutputStats','sheetTableWrap'].forEach(id=>$(id).innerHTML='');$('sheetTableWrap').hidden=true;$('copySheetBtn').disabled=true;$('downloadSheetBtn').disabled=true;hideStatus('sheetStatus');});
+
+/* UID converter */
+function convertUIDs(){const raw=$('uidInput').value.trim();if(!raw){$('uidResult').value='';$('linkCounter').textContent='0 links';status('uidStatus','Paste UIDs first.',true);return}const uids=raw.split(/\n/).map(s=>s.trim()).filter(Boolean).map(s=>s.replace(/[^0-9]/g,'')).filter(Boolean);if(!uids.length){$('uidResult').value='';$('linkCounter').textContent='0 links';status('uidStatus','No numeric UIDs found.',true);return}const links=uids.map(u=>'https://www.facebook.com/profile.php?id='+u);$('uidResult').value=links.join('\n');$('linkCounter').textContent=`${links.length} links`;status('uidStatus',`${links.length} links created.`);}
+$('convertBtn').addEventListener('click',convertUIDs);
+$('clearUIDBtn').addEventListener('click',()=>{$('uidInput').value='';$('uidResult').value='';$('linkCounter').textContent='0 links';hideStatus('uidStatus')});
+$('clearOutputBtn').addEventListener('click',()=>{$('uidResult').value='';$('linkCounter').textContent='0 links';hideStatus('uidStatus')});
+$('copyUIDBtn').addEventListener('click',async()=>{if(!$('uidResult').value.trim()){status('uidStatus','Nothing to copy.',true);return}try{if(await copyText($('uidResult').value)){status('uidStatus','Links copied.');return}}catch(e){}$('uidResult').focus();$('uidResult').select();try{const ok=document.execCommand('copy');status('uidStatus',ok?'Links copied.':'Select and copy manually.',!ok)}catch(e){status('uidStatus','Select and copy manually.',true)}});
+$('downloadUIDBtn').addEventListener('click',()=>{if(!$('uidResult').value.trim()){status('uidStatus','Convert UIDs first.',true);return}downloadText($('uidResult').value,'facebook-profile-links.txt','text/plain;charset=utf-8')});
+
+/* Random serial picker */
+let chosen=[],remaining=[],pickerHasResults=false;
+function entries(){return $('serialInput').value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean)}
+function updatePickerCount(){$('inputCount').textContent=`${entries().length} entries`;updatePercentHint()}
+function updatePercentHint(){const n=entries().length,p=Number($('percentage').value);if(!n||!Number.isFinite(p)||p<=0||p>100){$('percentHint').textContent='Enter a percentage.';return}const c=Math.min(n,Math.max(1,Math.round(n*p/100)));$('percentHint').textContent=`${p}% = ${c} entries`;}
+function renderPicker(){const total=pickerHasResults?chosen.length+remaining.length:0;$('totalStat').textContent=total;$('selectedStat').textContent=pickerHasResults?chosen.length:0;$('remainingStat').textContent=pickerHasResults?remaining.length:0;$('selectedCount').textContent=`${pickerHasResults?chosen.length:0} items`;$('remainingCount').textContent=`${pickerHasResults?remaining.length:0} items`;$('selectedResult').textContent=pickerHasResults?(chosen.map(x=>x.value).join('\n')||'No entries selected.'):'Selected numbers appear here.';$('remainingResult').textContent=pickerHasResults?(remaining.map(x=>x.value).join('\n')||'No entries remaining.'):'Remaining numbers appear here.'}
+function pickerGenerate(count){hideStatus('pickerNotice');const vals=entries();if(!vals.length){status('pickerNotice','Enter at least one serial number.',true);return}if(!Number.isInteger(count)||count<1){status('pickerNotice','Enter a valid count.',true);return}if(count>vals.length){status('pickerNotice',`Only ${vals.length} entries available.`,true);return}const all=vals.map((value,index)=>({value,index}));for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]]}chosen=all.slice(0,count);const picked=new Set(chosen.map(x=>x.index));remaining=all.filter(x=>!picked.has(x.index));pickerHasResults=true;renderPicker();status('pickerNotice',`Selected ${count} of ${vals.length} entries.`)}
+$('serialInput').addEventListener('input',updatePickerCount);$('percentage').addEventListener('input',updatePercentHint);
+$('manualBtn').addEventListener('click',()=>{const v=$('randomCount').value;if(v.trim()===''){status('pickerNotice','Enter a selection count.',true);return}pickerGenerate(Number(v))});
+$('percentBtn').addEventListener('click',()=>{const raw=$('percentage').value,p=Number(raw),n=entries().length;if(raw.trim()===''||!Number.isFinite(p)||p<=0||p>100){status('pickerNotice','Enter a percentage above 0 and up to 100.',true);return}if(!n){status('pickerNotice','Enter at least one serial number.',true);return}pickerGenerate(Math.min(n,Math.max(1,Math.round(n*p/100))));});
+$('clearInputBtn').addEventListener('click',()=>{$('serialInput').value='';updatePickerCount();status('pickerNotice','Input cleared. Existing results unchanged.')});
+$('sampleBtn').addEventListener('click',()=>{$('serialInput').value=Array.from({length:10},(_,i)=>`SN-${1001+i}`).join('\n');updatePickerCount();hideStatus('pickerNotice')});
+$('clearPickerOutputBtn').addEventListener('click',()=>{chosen=[];remaining=[];pickerHasResults=false;renderPicker();$('randomCount').value='';$('percentage').value='';updatePercentHint();hideStatus('pickerNotice')});
+async function copyPicker(list){const txt=list.map(x=>x.value).join('\n');if(!txt){status('pickerNotice','Nothing to copy.',true);return}try{if(await copyText(txt)){status('pickerNotice','Copied to clipboard.');return}}catch(e){}const area=document.createElement('textarea');area.value=txt;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();const ok=document.execCommand('copy');area.remove();status('pickerNotice',ok?'Copied to clipboard.':'Copy failed.',!ok)}
+$('copySelected').addEventListener('click',()=>copyPicker(chosen));$('copyRemaining').addEventListener('click',()=>copyPicker(remaining));
+updatePickerCount();renderPicker();
+if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>
